@@ -2,9 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const awsIot = require('aws-iot-device-sdk');
 const cors = require('cors')
-
 const routes = require('./routes');
-
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
@@ -22,7 +20,6 @@ const device = awsIot.device({
      host: 'a3c7g9oajzpgvh-ats.iot.us-west-2.amazonaws.com'
 });
 
-
 device
   .on('connect', function() {
     console.log('connect');
@@ -30,11 +27,7 @@ device
     device.publish('$aws/things/esp32g/shadow/update/delta', JSON.stringify({ test_data: 1}));
   });
 
-// device
-//   .on('message', function(topic, payload) {
-//     console.log('message', topic, payload.toString());
-//   });
-
+// Iniciando conexão com o websecket
 io.on('connection', socket => {
   console.log('Nova conexão', socketid);
 
@@ -46,11 +39,8 @@ io.on('connection', socket => {
 
 });
 
-
 app.use(cors());
 app.use(express.json());
 app.use(routes);
-
-
 
 server.listen(3000);
