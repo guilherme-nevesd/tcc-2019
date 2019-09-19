@@ -4,9 +4,18 @@ const Leitura = require('../models/Leitura');
 module.exports = {
 
   async index(req, res) {
-    const leituras = await Leitura.find({});
+    const { inicio, fim } = req.query;
+
+    if(inicio && fim){
+      var dataInicio = new Date(inicio);
+      var dataFim = new Date(fim);
+      // Consulta com filtro
+      return res.json()
+    } else {
+      const leituras = await Leitura.find({});
+      return res.json(leituras);
+    }
     
-    return res.json(leituras);
   },
 
   async store(req, res) {
