@@ -9,11 +9,21 @@ module.exports = {
     if(inicio && fim){
       var dataInicio = new Date(inicio);
       var dataFim = new Date(fim);
-      // Consulta com filtro
-      return res.json()
+
+      const leituras = await Leitura.find({
+        $and:[
+          { createdAt: { $gte: dataInicio } },
+          { createdAt: { $lte: dataFim } },
+        ]
+      });
+
+      return res.json(leituras)
+
     } else {
       const leituras = await Leitura.find({});
+      
       return res.json(leituras);
+        
     }
     
   },
