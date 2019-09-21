@@ -13,4 +13,4 @@ const LeituraSchema = new Schema({
   timestamps: true,
 });
 
-module.exports = model('Leitura', LeituraSchema);
+module.exports = model('Leitura', LeituraSchema); 

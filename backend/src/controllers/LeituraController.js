@@ -41,6 +41,6 @@ module.exports = {
 };
 
 // {
-//   "dispositivo" : " ",
-//   "corrente" : " "
+//   "dispositivo" : " conteudo ",
+//   "corrente" : " conteudo "
 // }
