@@ -1,24 +1,27 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+
+import SideBar from './components/SideBar.js'
+import TopBar from './components/TopBar.js'
+import Footer from './components/Footer.js'
+import ModalLogout from './components/ModalLogout.js'
+import Routes from './routes'
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div id="wrapper">
+      <SideBar />
+      <div id="content-wrapper" className="d-flex flex-column">
+        <div id="content">
+          <TopBar />
+          <div className="container-fluid">
+            <Routes />
+          </div>
+        </div>
+        <Footer />
+      </div>
+      <ModalLogout />
     </div>
   );
 }
