@@ -7,9 +7,9 @@ import Controle from './pages/Controle.js'
 export default function Routes() {
   return (
     <BrowserRouter>
-      <Route path="/" exact component={Dashboard} />
-      <Route path="/historico" component={Historico} />
-      <Route path="/controle" component={Controle} />
+      <Route path="/dashboardd" exact component={Dashboard} />
+      <Route path="/historico" exact component={Historico} />
+      <Route path="/controle" exact component={Controle} />
     </BrowserRouter>
   );
 };
