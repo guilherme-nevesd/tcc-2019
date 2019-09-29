@@ -29,12 +29,12 @@ device
 
 // Iniciando conexão com o websecket
 io.on('connection', socket => {
-  console.log('Nova conexão', socketid);
+  console.log('Nova conexão', socket.id);
 
   device
   .on('message', function(topic, payload) {
     console.log('message', topic, payload.toString());
-    socket.emit('leitura', payload.toString());
+    socket.emit('leitura', JSON.parse(payload.toString()))
   });
 
 });
@@ -43,4 +43,4 @@ app.use(cors());
 app.use(express.json());
 app.use(routes);
 
-server.listen(3000);
+server.listen(3333);
