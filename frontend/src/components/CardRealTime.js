@@ -2,20 +2,19 @@ import React, { useEffect, useState } from 'react';
 import api from '../services/api'
 import io from 'socket.io-client'
 
+const socket = io('localhost:3333');
+
 export default function CardRealTime( { params } ) {
-  const [corrente, setCorrente] = useState('')
+  const [corrente, setCorrente] = useState('0.0')
   const [potencia, setPotencia] = useState('')
 
-  useEffect(() => {
-    const socket = io('http://localhost:3333');
-    socket.on('leitura', message => {
+  socket.on('leitura', message => {
+    setCorrente(message)
+  })
 
-      console.log(message["message"]);
-      console.log(message);
-      setCorrente(message["message"]);
-      message = '';
-    })
-  });
+  useEffect(() => {
+    console.log(corrente); 
+  }, [corrente]);
 
   return (
     <div className="col-xl-3 col-md-6 mb-4">

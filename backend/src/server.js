@@ -24,18 +24,29 @@ device
   .on('connect', function() {
     console.log('connect');
     device.subscribe('$aws/things/esp32g/shadow/update/delta');
-    device.publish('$aws/things/esp32g/shadow/update/delta', JSON.stringify({ test_data: 1}));
+    // device.publish('$aws/things/esp32g/shadow/update/delta', JSON.stringify({ test_data: 1}));
   });
 
-// Iniciando conexão com o websecket
+var cont = 0;
+
+// Iniciando conexão com o websocket 
 io.on('connection', socket => {
   console.log('Nova conexão', socket.id);
 
-  device
-  .on('message', function(topic, payload) {
-    console.log('message', topic, payload.toString());
-    socket.emit('leitura', JSON.parse(payload.toString()))
-  });
+  // device
+  // .on('message', function(topic, payload) {
+  //   console.log('message', topic, payload.toString());
+  //   socket.emit('leitura', JSON.parse(payload.toString()))
+  // });
+
+  setInterval( function(){
+    socket.emit('leitura', cont++);
+    console.log(cont)
+  }, 2000);
+
+  socket.on('disconnect', () => {
+    console.log('Fim da conexão', socket.id);
+  })
 
 });
 
