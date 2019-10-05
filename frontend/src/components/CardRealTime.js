@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import api from '../services/api'
 import io from 'socket.io-client'
 
 const socket = io('localhost:3333');
@@ -11,14 +10,19 @@ export default function CardRealTime( { params } ) {
   const [corrente, setCorrente] = useState('0.0')
   const [potencia, setPotencia] = useState('')
 
-  socket.once('leitura', message => {
-    setCorrente(message['message'])
-  })
+  socket.on('leitura', message => {
+    setCorrente(message['message']);
+    let calc = parseFloat( (message['message'] * 127).toFixed(2) );
+    setPotencia(calc);;
+  });
 
-  useEffect(() => {
-    console.log("contador :::: " + cont++);
-    console.log(corrente); 
-  }, [corrente]);
+  // useEffect(() => {
+  //   console.log(corrente); 
+  // }, [corrente]);
+
+  // useEffect(() => {
+  //   console.log(potencia); 
+  // }, [potencia]);
 
   return (
     <div className="col-xl-3 col-md-6 mb-4">
@@ -28,7 +32,8 @@ export default function CardRealTime( { params } ) {
             <div className="col mr-2">
               <div className="text-xs font-weight-bold text-primary text-uppercase mb-1">Tempo Real</div>
               <div className="h5 mb-0 font-weight-bold text-gray-700">
-                { corrente } A &nbsp; | &nbsp;{ potencia } W/h
+                { corrente } A <br/>
+                { potencia } W/h
               </div>
             </div>
             <div className="col-auto">

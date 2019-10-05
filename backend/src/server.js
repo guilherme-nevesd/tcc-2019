@@ -20,33 +20,41 @@ const device = awsIot.device({
      host: 'a3c7g9oajzpgvh-ats.iot.us-west-2.amazonaws.com'
 });
 
+// Conexão ao protocolo Mqtt
 device
   .on('connect', function() {
-    console.log('connect');
+    console.log('... conectado a um mqtt');
     device.subscribe('$aws/things/esp32g/shadow/update/delta');
-    // device.publish('$aws/things/esp32g/shadow/update/delta', JSON.stringify({ test_data: 1}));
+
+    // função apenas para teste
+    setInterval(() => {
+      let randon = Math.random();
+      console.log(randon.toFixed(2));
+      device.publish('$aws/things/esp32g/shadow/update/delta', JSON.stringify({ message: randon.toFixed(2)}));
+    }, 2000);
+
   });
 
+// Escutando o evento message mqtt
 device
   .on('message', function(topic, payload) {
-    console.log('message', topic, payload.toString());    
+    console.log('... message salva no banco')
+    // console.log('message', topic, payload.toString());    
   });
-
-var clients = {};
 
 // Iniciando conexão com o websocket 
 io.on('connection', socket => {
-  console.log('================== Nova conexão ===================', socket.id);  
+  console.log('==== nova conexão ====', socket.id);  
 
   device
   .on('message', function(topic, payload) {
-    console.log(socket.id)
+    console.log('... io enviado para: ', socket.id)
     socket.emit('leitura', JSON.parse(payload.toString()))
     
   });
 
   socket.on('disconnect', function() {
-    console.log("===== desconectou ====", socket.id);
+    console.log("==== desconectou ====", socket.id);
     socket.disconnect(true)
   });
 
