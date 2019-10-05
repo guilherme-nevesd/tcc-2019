@@ -4,15 +4,19 @@ import io from 'socket.io-client'
 
 const socket = io('localhost:3333');
 
+var cont = 0
+
+
 export default function CardRealTime( { params } ) {
   const [corrente, setCorrente] = useState('0.0')
   const [potencia, setPotencia] = useState('')
 
-  socket.on('leitura', message => {
-    setCorrente(message)
+  socket.once('leitura', message => {
+    setCorrente(message['message'])
   })
 
   useEffect(() => {
+    console.log("contador :::: " + cont++);
     console.log(corrente); 
   }, [corrente]);
 
