@@ -11,8 +11,8 @@ export default function CardRealTime( { params } ) {
   const [potencia, setPotencia] = useState('')
 
   socket.on('leitura', message => {
-    setCorrente(message['message']);
-    let calc = parseFloat( (message['message'] * 127).toFixed(2) );
+    setCorrente(message['message']['corrente']);
+    let calc = parseFloat( (message['message']['corrente'] * 127).toFixed(2) );
     setPotencia(calc);;
   });
 
