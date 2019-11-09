@@ -2,11 +2,13 @@ const { Schema, model } = require('mongoose');
 
 const ConsumoSchema = new Schema({
   watts: {
-    type: String,
+    type: Number,
     required: true,
   },
-},{
-  timestamps: true,
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
 });
 
 module.exports = model('Consumo', ConsumoSchema);

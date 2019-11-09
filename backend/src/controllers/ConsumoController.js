@@ -36,7 +36,31 @@ module.exports = {
     });
 
     return res.json(consumo)
+  },
+
+  async create(consumoWatts) {
+    await Consumo.create({
+      watts: consumoWatts
+    });
+    console.log('======================== Consumo criado ==')
+  },
+
+  getConsumoDia(diaInicio, diaFim){
+    if(diaInicio && diaFim){
+      const consumos = Consumo.find({
+        $and:[
+          { createdAt: { $gte: diaInicio } },
+          { createdAt: { $lte: diaFim } },
+        ]
+      });
+
+      return consumos;
+
+    } else {
+      return 0;   
+    }
   }
+
 };
 
 // {

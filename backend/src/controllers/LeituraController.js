@@ -4,8 +4,7 @@ const Leitura = require('../models/Leitura');
 module.exports = {
 
   async index(req = null, res = null) {
-    console.log(req);
-    // console.log(res);
+
     const { inicio, fim } = req.query;
 
     if(inicio && fim){
@@ -47,33 +46,27 @@ module.exports = {
     let corrente = leitura["message"]['corrente']
 
 
-    // await Leitura.create({
-    //   dispositivo: dispositivo,
-    //   corrente: corrente
-    // });
+    await Leitura.create({
+      dispositivo: dispositivo,
+      corrente: corrente
+    });
 
-    console.log("!!!! MENSAGEM SALVA NO BANCO !!!!")
-    console.log(dispositivo);
-    console.log(corrente);
+    // console.log("!!!! MENSAGEM SALVA NO BANCO !!!!" + dispositivo + corrente)
   },
 
-  async getIntervalo(inicio, fim) {
+  getIntervalo(inicio,fim) {
     if(inicio && fim){
-      var dataInicio = new Date(inicio);
-      var dataFim = new Date(fim);
-
-      const leituras = await Leitura.find({
+      const leituras = Leitura.find({
         $and:[
-          { createdAt: { $gte: dataInicio } },
-          { createdAt: { $lte: dataFim } },
+          { createdAt: { $gte: inicio } },
+          { createdAt: { $lte: fim } },
         ]
       });
 
       return leituras;
 
     } else {
-      const leituras = await Leitura.find({});
-      
+      const leituras = Leitura.find({});
       return leituras;
         
     }
@@ -83,7 +76,7 @@ module.exports = {
 
 // {
 //   "dispositivo" : " conteudo ",
-//   "corrente" : " conteudo "
+//   "corrente" : " conteudo ",
 // }
 
 // { "dispositivo" : " conteudo ", "corrente" : " conteudo " }
