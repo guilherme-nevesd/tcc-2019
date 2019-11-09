@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
+import io from 'socket.io-client'
+const socket = io('localhost:3333');
 
 export default function CardGasto( { params } ) {
-  const [valor, setValor] = useState('')
+  const [valor, setValor] = useState('0.0')
+
+  socket.on('gasto', message => {
+    console.log(message)
+    setValor(message);
+  });
 
   return (
     <div className="col-xl-3 col-md-6 mb-4">

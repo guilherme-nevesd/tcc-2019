@@ -20,5 +20,3 @@ const BandeiraSchema = new Schema({
 });
 
 module.exports = model('Bandeira', BandeiraSchema); 
-
-

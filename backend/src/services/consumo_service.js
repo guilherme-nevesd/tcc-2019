@@ -30,7 +30,6 @@ var somaConsumdoDoDia = function(dados){
   dados.forEach(function(dado){
     somatorioConsumoDoDia = somatorioConsumoDoDia + dado.watts
   });
-  console.log('consumo dia --- :', somatorioConsumoDoDia)
 }
 
 
@@ -70,8 +69,10 @@ module.exports = {
   testeSendMqtt(device){
     setInterval(() => {
 
-      let randon = Math.random();
-      let message = { "dispositivo" : " Eps32 ", "corrente" : `${(randon*10).toFixed(2)}`  }
+      // let randon = Math.random();
+      // let message = { "dispositivo" : " Eps32 ", "corrente" : `${(randon*10).toFixed(2)}`  }
+      let randon = 47.244094488
+      let message = { "dispositivo" : " Eps32 ", "corrente" : `${randon.toFixed(9)}`  }
 
       device.publish('$aws/things/esp32g/shadow/update/delta', JSON.stringify({ message: message}));
 

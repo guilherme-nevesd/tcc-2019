@@ -1,8 +1,21 @@
 import React, { useState } from 'react';
+import io from 'socket.io-client'
+const socket = io('localhost:3333');
+
+const bandeiras = ['Bandeira Verde', 
+                   'Bandeira Amarela', 
+                   'Bandeira Vermelha P1', 
+                   'Bandeira Vermelha P2'
+                  ]
 
 export default function CardGasto( { params } ) {
-  const [tensao, setTensao] = useState('')
-  const [bandeira, setBandeira] = useState('')
+  const [tensao, setTensao] = useState('0')
+  const [bandeira, setBandeira] = useState('---')
+
+  socket.on('info', message => {
+    setTensao(message[0]);
+    setBandeira(bandeiras[message[1]])
+  });
 
   return (
     <div className="col-xl-3 col-md-6 mb-4">
@@ -12,8 +25,8 @@ export default function CardGasto( { params } ) {
             <div className="col mr-2">
               <div className="text-xs font-weight-bold text-primary text-uppercase mb-1">Informações</div>
               <div className="h6 mb-0 font-weight-bold text-gray-700">
-                Tensão: { tensao } V &nbsp; | &nbsp;
-                Bandeira: { bandeira } <br/>
+                Tensão: { tensao } V <br/>
+                { bandeira } <br/>
               </div>
             </div>
             <div className="col-auto">

@@ -10,41 +10,42 @@ const bandeiras = ['Bandeira Verde',
 
 module.exports = {
 
-async index() {
+  async index() {
 
-  var bandeiras = await Bandeira.find({})
+    var bandeiras = await Bandeira.find({})
 
-  return bandeiras
+    return bandeiras
 
-},
+  },
 
-async create(inicio, fim) {
+  async create(inicio, fim) {
 
-  response = await axios.get(`https://apidosetoreletrico.com.br/api/energy-providers/tariff-flags?monthStart=${inicio}&monthEnd=${fim}`)
+    response = await axios.get(`https://apidosetoreletrico.com.br/api/energy-providers/tariff-flags?monthStart=${inicio}&monthEnd=${fim}`)
 
-  const { flagType, month } = response.data.items[0]
+    const { flagType, month } = response.data.items[0]
 
 
-  bandeiraExists = await Bandeira.findOne({
-    $and:[
-      { tipoBandeira: flagType },
-      { mes: moment(month).month() + 1 },
-    ]
-  })
+    bandeiraExists = await Bandeira.findOne({
+      $and:[
+        { tipoBandeira: flagType },
+        { mes: moment(month).month() + 1 },
+      ]
+    })
 
-  if(!bandeiraExists){
-    console.log('Bandeira salva com sucesso!')
-    await Bandeira.create({
-      tipoBandeira: flagType,
-      descricao: bandeiras[flagType],
-      mes: moment(month).month() + 1
-    });
-  } else {
-    console.log('Ja foi encontrada uma bandeira salva com estes dados!')
-    console.log(bandeiraExists)
+    if(!bandeiraExists){
+      await Bandeira.create({
+        tipoBandeira: flagType,
+        descricao: bandeiras[flagType],
+        mes: moment(month).month() + 1
+      });
+    }
+  },
+
+  async getUltimaBandeira() {
+    var bandeira = await Bandeira.find({})
+
+    if(bandeira){
+      return bandeira[bandeira.length - 1]
+    }
   }
-
-}
-
-
 }

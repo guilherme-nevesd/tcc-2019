@@ -41,17 +41,13 @@ module.exports = {
   },
 
   async create(leitura) {
-
     let dispositivo = leitura["message"]['dispositivo']
     let corrente = leitura["message"]['corrente']
-
-
+    
     await Leitura.create({
       dispositivo: dispositivo,
       corrente: corrente
     });
-
-    // console.log("!!!! MENSAGEM SALVA NO BANCO !!!!" + dispositivo + corrente)
   },
 
   getIntervalo(inicio,fim) {

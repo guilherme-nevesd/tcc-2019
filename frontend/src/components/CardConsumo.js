@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
+import io from 'socket.io-client'
+const socket = io('localhost:3333');
 
 export default function CardConsumo( { params } ) {
-  const [potenciaMes, setPotenciaMes] = useState('')
+  const [potenciaDia, setPotenciaDia] = useState('0.0')
+
+  socket.on('consumo', message => {
+    setPotenciaDia(parseFloat(message).toFixed(2));
+  });
 
   return (
     <div className="col-xl-3 col-md-6 mb-4">
@@ -11,7 +17,7 @@ export default function CardConsumo( { params } ) {
             <div className="col mr-2">
               <div className="text-xs font-weight-bold text-primary text-uppercase mb-1">Consumo Acumulado</div>
               <div className="h5 mb-0 font-weight-bold text-gray-700">
-                { potenciaMes } W/h
+                { potenciaDia } Kw/h
               </div>
             </div>
             <div className="col-auto">

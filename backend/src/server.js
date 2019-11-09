@@ -7,13 +7,12 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
 const LeituraController = require('./controllers/LeituraController')
-const ConsumoService = require('./services/consumo_service')
 const BandeiraController = require('./controllers/BandeiraController')
+const ConsumoService = require('./services/consumo_service')
 const BandeiraService = require('./services/bandeira_service')
+const GastoService = require('./services/gasto_service')
 const Mqtt = require('./mqtt');
 var moment = require('moment')
-
-var consumoDia = 0;
 
 // mongoose.connect('mongodb+srv://guineves:guinevesd@cluster0-i1apd.mongodb.net/medidor?retryWrites=true&w=majority', {
 //   useNewUrlParser: true
@@ -24,11 +23,24 @@ mongoose.connect('mongodb://localhost:27017/db_tcc_medicoes')
 device = Mqtt.configure();
 Mqtt.connect(device);
 
-// Atualiza consumo diario
-setInterval(() => {
-  consumoDia = ConsumoService.getConsumoDia();
-},5000)
+// Variaveis globais
+var consumoDiaKwh = 0;
+var gastoDia = 0;
+var tipoBandeira = '';
 
+// Inicializa rotinas / services
+ConsumoService.testeSendMqtt(device); // Teste mqtt
+ConsumoService.calculaConsumoMinuto();
+ConsumoService.calculaCosumoDoDia();
+BandeiraService.buscaBandeiraDoMes()
+BandeiraService.bandeiraCorrente()
+
+// Atualiza variaveis
+setInterval(() => {
+  tipoBandeira = BandeiraService.getTipoBandeira();
+  consumoDiaKwh = ConsumoService.getConsumoDia() / 1000;
+  gastoDia = GastoService.calculaGastoDiario(consumoDiaKwh, tipoBandeira );
+},3000)
 
 io.on('connection', socket => { 
   console.log('==== nova conexão ====', socket.id);  
@@ -38,8 +50,13 @@ io.on('connection', socket => {
   .on('message', function(topic, payload) {
     console.log('... io enviado para: ', socket.id)
     socket.emit('leitura', JSON.parse(payload.toString()))
-    socket.emit('consumo', consumoDia)
   });
+  
+  setInterval(()=>{
+    socket.emit('consumo', consumoDiaKwh)
+    socket.emit('gasto', gastoDia)
+    socket.emit('info', [127,tipoBandeira])
+  },1000)
   
 });
 
@@ -48,14 +65,6 @@ device
 .on('message', function(topic, payload) {
   LeituraController.create(JSON.parse(payload.toString()))
 });
-
-
-// Inicializa rotinas / services
-// ConsumoService.testeSendMqtt(device); // Teste mqtt
-// ConsumoService.calculaConsumoMinuto();
-// ConsumoService.calculaCosumoDoDia();
-BandeiraService.buscaBandeiraDoMes()
-
 
 app.use(cors());
 app.use(express.json());
