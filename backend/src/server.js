@@ -48,22 +48,37 @@ io.on('connection', socket => {
   // Emite mensagens a cada recebimento via protocolo mqtt
   device
   .on('message', function(topic, payload) {
-    console.log('... io enviado para: ', socket.id)
-    socket.emit('leitura', JSON.parse(payload.toString()))
+    if(!!JSON.parse(payload.toString()).message){
+      console.log('... io enviado para: ', socket.id)
+      socket.emit('leitura', JSON.parse(payload.toString()))
+    }
   });
   
   setInterval(()=>{
-    socket.emit('consumo', consumoDiaKwh)
     socket.emit('gasto', gastoDia)
+    socket.emit('consumo', consumoDiaKwh)
     socket.emit('info', [127,tipoBandeira])
   },1000)
+
+  socket.on('controle', message => {
+    if(message){
+      console.log('LIGAR CIRCUITO')
+      device.publish('$aws/things/esp32g/shadow/update/delta', JSON.stringify({ controle: 1}));
+    } else {
+      console.log('DESLIGAR CIRCUITO')
+    }
+  });
   
 });
 
 // Salva no banco cada leitura recebida via mqtt
 device
 .on('message', function(topic, payload) {
-  LeituraController.create(JSON.parse(payload.toString()))
+  if(!!JSON.parse(payload.toString()).message){
+    LeituraController.create(JSON.parse(payload.toString()))
+  } else{
+    console.log('asdfasjkdhfaslkdfhasldkfjhasdlfjkahsdlfjkahsdlfkjashdlfakjsh')
+  }
 });
 
 app.use(cors());

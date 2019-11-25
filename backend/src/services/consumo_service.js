@@ -69,9 +69,9 @@ module.exports = {
   testeSendMqtt(device){
     setInterval(() => {
 
-      // let randon = Math.random();
+      let randon2 = Math.random();
       // let message = { "dispositivo" : " Eps32 ", "corrente" : `${(randon*10).toFixed(2)}`  }
-      let randon = 47.244094488
+      let randon = 47.244094488 - randon2
       let message = { "dispositivo" : " Eps32 ", "corrente" : `${randon.toFixed(9)}`  }
 
       device.publish('$aws/things/esp32g/shadow/update/delta', JSON.stringify({ message: message}));

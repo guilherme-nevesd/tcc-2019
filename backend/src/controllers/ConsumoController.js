@@ -15,12 +15,12 @@ module.exports = {
           { createdAt: { $gte: dataInicio } },
           { createdAt: { $lte: dataFim } },
         ]
-      });
+      }).sort({createdAt: 'desc'}).limit(60);
 
       return res.json(Consumos)
 
     } else {
-      const consumos = await Consumo.find({});
+      const consumos = await Consumo.find({}).sort({createdAt: 'desc'}).limit(60);
       
       return res.json(consumos);
         

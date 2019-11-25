@@ -1,18 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client'
-const socket = io('localhost:3333');
-var fator5s = 5/3600;
 
-export default function CardRealTime( { params } ) {
+export default function CardRealTime() {
   const [corrente, setCorrente] = useState('0.0')
   const [potencia, setPotencia] = useState('')
+  const socket = io('localhost:3333');  
+  var fator5s = 5/3600;
+  
+  useEffect(() => {
+    socket.on('leitura', message => {
+      setCorrente(parseFloat(message['message']['corrente']).toFixed(2));
+      let calc = parseFloat( (message['message']['corrente'] * 127 * fator5s).toFixed(2) );
+      setPotencia(calc);
+    });
 
-  socket.on('leitura', message => {
-    setCorrente(parseFloat(message['message']['corrente']).toFixed(2));
-    let calc = parseFloat( (message['message']['corrente'] * 127 * fator5s).toFixed(2) );
-    setPotencia(calc);
-  });
-
+    return () => {
+      socket.disconnect()
+    }
+  }, []);
+  
   return (
     <div className="col-xl-3 col-md-6 mb-4">
       <div className="card border-left-primary shadow h-100 py-2">

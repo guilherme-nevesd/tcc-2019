@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client'
-const socket = io('localhost:3333');
 
 const bandeiras = ['Bandeira Verde', 
                    'Bandeira Amarela', 
@@ -8,14 +7,21 @@ const bandeiras = ['Bandeira Verde',
                    'Bandeira Vermelha P2'
                   ]
 
-export default function CardGasto( { params } ) {
+export default function CardGasto() {
+  const socket = io('localhost:3333');
   const [tensao, setTensao] = useState('0')
   const [bandeira, setBandeira] = useState('---')
 
-  socket.on('info', message => {
-    setTensao(message[0]);
-    setBandeira(bandeiras[message[1]])
-  });
+  useEffect(() => {
+    socket.on('info', message => {
+      setTensao(message[0]);
+      setBandeira(bandeiras[message[1]])
+    });
+
+    return () => {
+      socket.disconnect()
+    }
+  }, []);
 
   return (
     <div className="col-xl-3 col-md-6 mb-4">

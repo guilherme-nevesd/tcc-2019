@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client'
-const socket = io('localhost:3333');
 
-export default function CardConsumo( { params } ) {
+export default function CardConsumo() {
+  const socket = io('localhost:3333');
   const [potenciaDia, setPotenciaDia] = useState('0.0')
 
-  socket.on('consumo', message => {
-    setPotenciaDia(parseFloat(message).toFixed(2));
-  });
+  useEffect(() => {
+    socket.on('consumo', message => {
+      setPotenciaDia(parseFloat(message).toFixed(2));
+    });
+
+    return () => {
+      socket.disconnect()
+      console.log('socket desconectado')
+    }
+  }, []);
 
   return (
     <div className="col-xl-3 col-md-6 mb-4">

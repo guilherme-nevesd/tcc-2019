@@ -1,4 +1,4 @@
-const axios = require('axios');;
+const axios = require('axios');
 const Leitura = require('../models/Leitura');
 
 module.exports = {
@@ -16,12 +16,12 @@ module.exports = {
           { createdAt: { $gte: dataInicio } },
           { createdAt: { $lte: dataFim } },
         ]
-      });
+      }).sort({createdAt: 'desc'}).limit(60);
 
       return res.json(leituras)
 
     } else {
-      const leituras = await Leitura.find({});
+      const leituras = await Leitura.find({}).sort({createdAt: 'desc'}).limit(60);
       
       return res.json(leituras);
         

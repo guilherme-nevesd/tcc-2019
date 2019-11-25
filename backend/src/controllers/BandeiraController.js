@@ -1,4 +1,4 @@
-const axios = require('axios');;
+const axios = require('axios');
 const Bandeira = require('../models/Bandeira');
 var moment = require('moment')
 

@@ -10,6 +10,7 @@ import TopBar from './components/TopBar.js'
 import Footer from './components/Footer.js'
 import ModalLogout from './components/ModalLogout.js'
 
+
 function App() {
   return (
     <Router>
@@ -21,8 +22,8 @@ function App() {
             <div className="container-fluid">
             <Switch>
               <Route path="/" exact component={Dashboard} />
-              <Route path="/historico" component={Historico} />
               <Route path="/controle" component={Controle} />
+              <Route path="/historico" component={Historico} />
             </Switch>
             </div>
           </div>

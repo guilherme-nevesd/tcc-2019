@@ -3,7 +3,7 @@ import CardRealTime from '../components/CardRealTime.js'
 import CardConsumo from '../components/CardConsumo.js'
 import CardGasto from '../components/CardGasto.js'
 import CardInfo from '../components/CardInfo.js'
-import Grafico from '../components/Grafico.js'
+import GraficoDashboard from '../components/GraficoDashboard'
 
 export default function Dashboard() {
 
@@ -16,7 +16,7 @@ export default function Dashboard() {
         <CardInfo />
       </div>
       <div className="row">
-        <Grafico />
+        <GraficoDashboard/>
       </div>
     </React.Fragment>
   );
