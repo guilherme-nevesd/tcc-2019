@@ -2,13 +2,10 @@ import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client'
 
 export default function Card() {
-  const socket = io('localhost:3333');  
+  const socket = io('localhost:3333'); 
+  const $ = window.$; 
 
   useEffect(() => {
-
-    
-
-
     return () => {
       socket.disconnect()
     }
@@ -17,11 +14,15 @@ export default function Card() {
   var ligarCircuito = function(){
     socket.emit('controle', true)
     console.log('ligou circuito')
+    $('.controle').text('Circuito Ligado!')
+    $('.controle').removeClass("bg-danger").addClass("bg-success");
   }
 
   var desligarCircuito = function(){
     socket.emit('controle', false)
     console.log('desligou circuito')
+    $('.controle').text('Circuito desligado!')
+    $('.controle').removeClass("bg-success").addClass("bg-danger");
   }
 
 
@@ -34,7 +35,7 @@ export default function Card() {
 
           <div className="col-lg-12 mb-4">
               <div className="card bg-success text-white shadow">
-                <div className="card-body">
+                <div className="card-body controle">
                   Circuito ligado!
                   <div className="text-white-50 small"></div>
                 </div>
