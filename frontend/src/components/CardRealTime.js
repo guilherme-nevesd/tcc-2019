@@ -9,9 +9,10 @@ export default function CardRealTime() {
   
   useEffect(() => {
     socket.on('leitura', message => {
-      setCorrente(parseFloat(message['message']['corrente']).toFixed(2));
-      let calc = parseFloat( (message['message']['corrente'] * 127 * fator5s).toFixed(2) );
-      setPotencia(calc);
+      console.log(message.corrente)
+        setCorrente(parseFloat(message.corrente).toFixed(2));
+        let calc = parseFloat( (message.corrente * 127 * fator5s).toFixed(2) );
+        setPotencia(calc);
     });
 
     return () => {

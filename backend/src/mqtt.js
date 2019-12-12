@@ -17,7 +17,7 @@ module.exports = {
     device
       .on('connect', function() {
         console.log('... conectado a um mqtt');
-        device.subscribe('$aws/things/esp32g/shadow/update/delta');
+        device.subscribe('$aws/things/esp32g/shadow/update');
         // device.publish('$aws/things/esp32g/shadow/update/delta', JSON.stringify({ test_data: 1}));
       });
   },

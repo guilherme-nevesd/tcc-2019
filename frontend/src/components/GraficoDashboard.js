@@ -24,7 +24,7 @@ export default function GraficoDashboard() {
             var series = this.series[0];
             socket.on('leitura', message => {
               var x = (new Date()).getTime(), // current time
-                  y = parseFloat(message['message']['corrente']);
+                  y = parseFloat(message.corrente);
                   series.addPoint([x, y], true, true);
             });
         }
@@ -112,7 +112,7 @@ export default function GraficoDashboard() {
             var series = this.series[0];
             socket.on('leitura', message => {
               var x = (new Date()).getTime(), // current time
-                  y = parseFloat(message['message']['corrente'] * 127 * fator5s);
+                  y = parseFloat(message.corrente * 127 * fator5s);
               series.addPoint([x, y], true, true);
             });
         }

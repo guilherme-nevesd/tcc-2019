@@ -29,7 +29,7 @@ var gastoDia = 0;
 var tipoBandeira = '';
 
 // Inicializa rotinas / services
-ConsumoService.testeSendMqtt(device); // Teste mqtt
+// ConsumoService.testeSendMqtt(device); // Teste mqtt
 ConsumoService.calculaConsumoMinuto();
 ConsumoService.calculaCosumoDoDia();
 BandeiraService.buscaBandeiraDoMes()
@@ -43,13 +43,13 @@ setInterval(() => {
 },3000)
 
 io.on('connection', socket => { 
-  console.log('==== nova conexão ====', socket.id);  
+  // console.log('==== nova conexão ====', socket.id);  
 
   // Emite mensagens a cada recebimento via protocolo mqtt
   device
   .on('message', function(topic, payload) {
-    if(!!JSON.parse(payload.toString()).message){
-      console.log('... io enviado para: ', socket.id)
+    if(!!JSON.parse(payload.toString())){
+      // console.log('... io enviado para: ', socket.id)
       socket.emit('leitura', JSON.parse(payload.toString()))
     }
   });
@@ -63,8 +63,10 @@ io.on('connection', socket => {
   socket.on('controle', message => {
     if(message){
       console.log('LIGAR CIRCUITO')
-      device.publish('$aws/things/esp32g/shadow/update/delta', JSON.stringify({ controle: 1}));
+      console.log('------', message)
+      device.publish('$aws/things/esp32g/shadow/update/delta', JSON.stringify(1));
     } else {
+      device.publish('$aws/things/esp32g/shadow/update/delta', JSON.stringify(0));
       console.log('DESLIGAR CIRCUITO')
     }
   });
@@ -74,10 +76,12 @@ io.on('connection', socket => {
 // Salva no banco cada leitura recebida via mqtt
 device
 .on('message', function(topic, payload) {
+  console.log(JSON.parse(payload.toString()))
+  console.log(Math.random())
   if(!!JSON.parse(payload.toString()).message){
     LeituraController.create(JSON.parse(payload.toString()))
   } else{
-    console.log('asdfasjkdhfaslkdfhasldkfjhasdlfjkahsdlfjkahsdlfkjashdlfakjsh')
+    // console.log('asdfasjkdhfaslkdfhasldkfjhasdlfjkahsdlfjkahsdlfkjashdlfakjsh')
   }
 });
 
