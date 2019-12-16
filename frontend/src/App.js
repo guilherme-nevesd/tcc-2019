@@ -5,6 +5,7 @@ import './App.css';
 import Dashboard from './pages/Dashboard.js'
 import Historico from './pages/Historico.js'
 import Controle from './pages/Controle.js'
+import Cadastro from './pages/Cadastro.js'
 import SideBar from './components/SideBar.js'
 import TopBar from './components/TopBar.js'
 import Footer from './components/Footer.js'
@@ -24,6 +25,7 @@ function App() {
               <Route path="/" exact component={Dashboard} />
               <Route path="/controle" component={Controle} />
               <Route path="/historico" component={Historico} />
+              <Route path="/cadastro" component={Cadastro} />
             </Switch>
             </div>
           </div>

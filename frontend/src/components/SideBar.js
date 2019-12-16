@@ -39,6 +39,13 @@ export default function SideBar({ history }) {
         </Link>
       </li>
 
+      <li className="nav-item">
+        <Link className="nav-link" to='/cadastro'>
+          <i className="far fa-fw fa-plus-square"></i>
+          <span>Cadastro</span>
+        </Link>
+      </li>
+
       <hr className="sidebar-divider d-none d-md-block"/>
 
       <div className="text-center d-none d-md-inline">

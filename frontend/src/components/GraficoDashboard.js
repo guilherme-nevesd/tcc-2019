@@ -5,6 +5,7 @@ import io from 'socket.io-client'
 
 export default function GraficoDashboard() {
   const socket = io('localhost:3333');
+  var fatorCorrente = 0.09448818
   const fator5s = 5/3600;
 
   useEffect(() => {  
@@ -23,8 +24,9 @@ export default function GraficoDashboard() {
             // Seta as configuracoes do grafico a cada segundo
             var series = this.series[0];
             socket.on('leitura', message => {
+              let valor = parseFloat((message.corrente * fatorCorrente).toFixed(2))
               var x = (new Date()).getTime(), // current time
-                  y = parseFloat(message.corrente);
+                  y = valor;
                   series.addPoint([x, y], true, true);
             });
         }

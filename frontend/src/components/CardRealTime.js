@@ -4,15 +4,18 @@ import io from 'socket.io-client'
 export default function CardRealTime() {
   const [corrente, setCorrente] = useState('0.0')
   const [potencia, setPotencia] = useState('')
-  const socket = io('localhost:3333');  
+  const socket = io('localhost:3333');
+  var fatorCorrente = 0.094488189;  
   var fator5s = 5/3600;
   
   useEffect(() => {
     socket.on('leitura', message => {
-      console.log(message.corrente)
-        setCorrente(parseFloat(message.corrente).toFixed(2));
-        let calc = parseFloat( (message.corrente * 127 * fator5s).toFixed(2) );
+      if(parseFloat(message.corrente) === 5){
+        let valor = parseFloat(message.corrente) * fatorCorrente
+        setCorrente(valor.toFixed(2));
+        let calc = parseFloat( (valor * 127 * fator5s).toFixed(2) );
         setPotencia(calc);
+      }
     });
 
     return () => {
